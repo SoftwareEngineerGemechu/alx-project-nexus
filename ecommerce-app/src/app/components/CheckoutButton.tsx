@@ -1,6 +1,10 @@
 "use client";
 
-export default function CheckoutButton({ items }: { items: any[] }) {
+interface CheckoutButtonProps {
+  items: { id: string; quantity: number }[];
+}
+
+export default function CheckoutButton({ items }: CheckoutButtonProps) {
   const handleCheckout = async () => {
     const res = await fetch("/api/checkout_sessions", {
       method: "POST",
