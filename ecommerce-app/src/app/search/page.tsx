@@ -1,4 +1,4 @@
-"use client";
+"use client"; // <- Important: this makes the whole page a client component
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -11,7 +11,6 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q")?.toLowerCase() || "";
 
-  // Filter products by name or description
   const filtered = productsList.filter(
     (p) =>
       p.name.toLowerCase().includes(query) ||
