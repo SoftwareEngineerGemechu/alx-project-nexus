@@ -8,6 +8,7 @@ import AuthNavItem from "./AuthNavItem";
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false); // ✅ Added: mobile menu state
 
   // Map category slug to an icon (Boxicons)
   const categoryIcons: Record<string, string> = {
@@ -113,8 +114,75 @@ export default function Navigation() {
             {/* Authentication */}
             <AuthNavItem />
           </div>
+
+          {/* ✅ Added: Hamburger menu button for mobile */}
+          <button
+            className="md:hidden text-white text-3xl"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            <i className={mobileOpen ? "bx bx-x" : "bx bx-menu"}></i>
+          </button>
         </div>
       </div>
+
+      {/* ✅ Added: Mobile dropdown menu */}
+      {mobileOpen && (
+        <div className="md:hidden bg-[#003d5d] px-4 pb-4 space-y-4">
+          {/* Search bar on mobile */}
+          <form action="/search" method="get" className="group relative">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search for products..."
+              className="w-full bg-white/10 border border-white/20 rounded-full py-2 pl-4 pr-10 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-[#edae49] focus:border-transparent transition-all"
+            />
+            <button
+              type="submit"
+              className="absolute right-1 top-1/2 -translate-y-1/2 text-white/70 p-1.5 hover:text-white rounded-full transition-colors"
+            >
+              <i className="bx bx-search text-xl"></i>
+            </button>
+          </form>
+
+          {/* Products Link */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="w-full text-left text-white/90 hover:text-[#edae49] transition-colors p-2 rounded-lg hover:bg-white/10 flex items-center"
+          >
+            <i className="bx bx-store text-2xl mr-2"></i>
+            Products
+            <i className="bx bx-chevron-down ml-auto"></i>
+          </button>
+          {open && (
+            <div className="bg-white rounded-xl shadow-lg">
+              <ul className="divide-y divide-gray-100">
+                {categories.map((cat) => (
+                  <li key={cat.slug}>
+                    <Link
+                      href={`/products/${cat.slug}`}
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-200 transition-colors"
+                    >
+                      <i
+                        className={`${
+                          categoryIcons[cat.slug] || "bx bx-box"
+                        } text-xl`}
+                        style={{ color: cat.color }}
+                      ></i>
+                      <span>{cat.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Cart + Auth on mobile */}
+          <div className="flex items-center space-x-4">
+            <CartDrawer />
+            <AuthNavItem />
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
